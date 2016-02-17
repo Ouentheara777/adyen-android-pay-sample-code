@@ -212,7 +212,7 @@ Once you have retrieved the Full Wallet in the `onActivityResult()` callback, yo
     // Get the JSON of the token object as a String
     String tokenJSON = token.getToken();
 
-## Step 8 - Send the payment token to Adyen for processing
+## Step 8 - Send the payment token to Adyen for processing (test)
 
 Based on the Full Wallet retrieved in step 7 you will build an object structure to be sent to your merchant server. 
 On your merchant server,  convert the object structure received based on the Full Wallet data to a JSON object with the following structure:
@@ -257,16 +257,19 @@ On your merchant server,  convert the object structure received based on the Ful
 
 Please find the full code for the demo merchant server in this repository.
 
-## Step 9 - Testing
 Send the test tokens to:
 
     https://pal-test.adyen.com/pal/servlet/Payment/V12/authorise
 
-Please note that this functionality will not be available until March 5th. Please contact Adyen Support for more information.
+We will support your testing activities from March 5th onwards. Please contact Adyen Support for more information.
 >Note:
 >If you are familiar with the Adyen Apple Pay integration this step will be the same and you will receive the same responses from our back-office platform.
 
-## Step 10 - Live testing
+## Step 9 - Switch to live
 
-Testing against the Adyen live platform can only be done with live cards added to Android Pay application. We will support your live testing activities from March 9th onwards.
+Once successfully completed the testing with the servers of Google and Adyen, you are ready for the switch to live. 
+
+Contact Adyen Support to request the 'publicKey' for live payment processing. Also review the [Android Pay setup guidelines] (https://developers.google.com/android-pay/android/tutorial) for obtaining live credentials of your application.
+
+We will support your live testing activities from March 9th onwards. Please contact Adyen Support for more information.
 
