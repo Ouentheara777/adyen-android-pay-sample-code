@@ -12,7 +12,6 @@
 	- [Step 7 - Retrieve the Full Wallet](#step-7-retrieve-the-full-wallet)
 	- [Step 8 - Send the payment token to Adyen for processing](#step-8-send-the-payment-token-to-adyen-for-processing)
 	- [Step 9 - Testing](#step-9-testing)
-	- [Step 10 - Live testing](#step-10-live-testing)
 
 ##Introduction
 
