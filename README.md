@@ -1,6 +1,9 @@
 #Android Pay
 
-[TOC]
+**[Introduction](#introduction)**
+
+**[Step 1 - Set up the sample and Google Play Services](#step-1-set-up-the-sample-and-Google-Play-Services)**
+
 
 ##Introduction
 
