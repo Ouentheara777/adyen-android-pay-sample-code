@@ -1,14 +1,24 @@
 #Android Pay
 
-**[Introduction](#introduction)**
-
-**[Step 1-Set up the sample and Google Play Services](#step-1-set-up-the-sample-and-Google-Play-Services)**
+- [Android Pay](#android-pay)
+	- [Introduction](#introduction)
+	- [Step 1 - Set up the sample and Google Play Services](#step-1-set-up-the-sample-and-google-play-services)
+		- [Modify your Manifest](#modify-your-manifest)
+	- [Step 2 - Check whether the user is enabled for Android Pay](#step-2-check-whether-the-user-is-enabled-for-android-pay)
+	- [Step 3 - Create a Masked Wallet request](#step-3-create-a-masked-wallet-request)
+	- [Step 4 - Add a purchase button and request the Masked Wallet](#step-4-add-a-purchase-button-and-request-the-masked-wallet)
+	- [Step 5 - Confirm the purchase and set the Masked Wallet](#step-5-confirm-the-purchase-and-set-the-masked-wallet)
+	- [Step 6 - Request the Full Wallet](#step-6-request-the-full-wallet)
+	- [Step 7 - Retrieve the Full Wallet](#step-7-retrieve-the-full-wallet)
+	- [Step 8 - Send the payment token to Adyen for processing](#step-8-send-the-payment-token-to-adyen-for-processing)
+	- [Step 9 - Testing](#step-9-testing)
+	- [Step 10 - Live testing](#step-10-live-testing)
 
 ##Introduction
 
 The documentation below will describe the Android Pay implementation as per the [Android Pay specifications](https://developers.google.com/android-pay/android/tutorial) of Google. The Adyen specific steps are included in the flow to describe the complete end-to-end integration process. 
 
-##Step 1-Set up the sample and Google Play Services
+##Step 1 - Set up the sample and Google Play Services
 
 Add the following dependency to your Gradle build file:
 
@@ -26,7 +36,7 @@ Before you can use Android Pay in your app, you need to add the following tag to
         <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
     </application>
 
-##Step 2: Check whether the user is enabled for Android Pay
+##Step 2 - Check whether the user is enabled for Android Pay
 
 Before starting the Android Pay flow, use the `isReadyToPay` method to check whether the user has the Android Pay app installed and is ready to pay. When this method returns `true`, show the Android Pay button. When it returns `false`, display other checkout options along with text notifying the user to set up the Android Pay app.
 
@@ -53,7 +63,7 @@ Before starting the Android Pay flow, use the `isReadyToPay` method to check whe
                 }
             });
 
-##Step 3: Create a Masked Wallet request
+##Step 3 - Create a Masked Wallet request
 
 You'll need to create an instance of `MaskedWalletRequest` to invoke the Android Pay API to retrieve the Masked Wallet information (such as shipping address, masked backing instrument number, and cart items). The `MaskedWalletRequest` object must be passed in when you initialize the purchase wallet fragment in the next section.
 
@@ -91,7 +101,7 @@ The `publicKey` can be retrieved from Adyen backoffice. If you need help in retr
 >Note:
 >After finalizing the testing phase, another 'publicKey' needs to be retrieved for the switch to live.
 
-## Step 4: Add a purchase button and request the Masked Wallet
+## Step 4 - Add a purchase button and request the Masked Wallet
 
 Next, construct an instance of WalletFragment to add to your checkout activity:
 
@@ -156,7 +166,7 @@ When the user clicks the buy button, the Masked Wallet is retrieved and returned
         }
     }
 
-##Step 5: Confirm the purchase and set the Masked Wallet
+##Step 5 - Confirm the purchase and set the Masked Wallet
 
 After the app obtains the Masked Wallet, it should present a confirmation page showing the total cost of the items purchased in the transaction.
 
@@ -170,7 +180,7 @@ After the app obtains the Masked Wallet, it should present a confirmation page s
 
 At this point the app has the shipping address and billing address, so you can calculate the exact total purchase price and display it. This activity also allows the user to change the Android Pay payment instrument and change the shipping address for the purchase.
 
-##Step 6: Request the Full Wallet
+##Step 6 - Request the Full Wallet
 When the user confirms the order, you are ready to request the Full Wallet. The Full Wallet Request should have the total charge that you are requesting including exact shipping, handling and tax. You must include the `GoogleTransactionId` that you received in the Masked Wallet response.
 
 Create a `FullWalletRequest` object that contains the various line items (including tax and shipping if necessary) and a Cart object.
@@ -184,7 +194,7 @@ Create a `FullWalletRequest` object that contains the various line items (includ
                     .build())
             .build();
 
-## Step 7: Retrieve the Full Wallet
+## Step 7 - Retrieve the Full Wallet
 
 Once you have constructed a `FullWalletRequest`, request the `FullWallet` object using `Wallet.Payments.loadFullWallet(...)`. Before you can call this method you'll need to construct a `GoogleApiClient` in the `onCreate` method of your Activity.
 
@@ -211,7 +221,7 @@ Once you have retrieved the Full Wallet in the `onActivityResult()` callback, yo
     // Get the JSON of the token object as a String
     String tokenJSON = token.getToken();
 
-## Step 8: Send the payment token to Adyen for processing (test)
+## Step 8 - Send the payment token to Adyen for processing (test)
 
 Based on the Full Wallet retrieved in step 7 you will build an object structure to be sent to your merchant server. 
 On your merchant server,  convert the object structure received based on the Full Wallet data to a JSON object with the following structure:
@@ -264,7 +274,7 @@ We will support your testing activities from March 5th onwards. Please contact A
 >Note:
 >If you are familiar with the Adyen Apple Pay integration this step will be the same and you will receive the same responses from our back-office platform.
 
-## Step 9: Switch to live
+## Step 9 - Switch to live
 
 Once successfully completed the testing with the servers of Google and Adyen, you are ready for the switch to live. 
 
