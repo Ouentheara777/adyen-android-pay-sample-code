@@ -18,10 +18,10 @@ Add the following dependency to your Gradle build file:
 
 Before you can use Android Pay in your app, you need to add the following tag to the <application> tag of your `AndroidManifest.xml`:
 
-  <application
-     ...
-      <!-- Enables the Android Pay API -->
-      <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
+    <application
+        ...
+        <!-- Enables the Android Pay API -->
+        <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
     </application>
 
 ##Step 2 - Check whether the user is enabled for Android Pay
