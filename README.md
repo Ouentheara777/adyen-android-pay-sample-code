@@ -1,11 +1,14 @@
 #Android Pay
 
+**[Introduction](#introduction)**
+
+**[Step 1-Set up the sample and Google Play Services](#step-1-set-up-the-sample-and-Google-Play-Services)**
 
 ##Introduction
 
 The documentation below will describe the Android Pay implementation as per the [Android Pay specifications](https://developers.google.com/android-pay/android/tutorial) of Google. The Adyen specific steps are included in the flow to describe the complete end-to-end integration process. 
 
-##Step 1: Set up the sample and Google Play Services
+##Step 1-Set up the sample and Google Play Services
 
 Add the following dependency to your Gradle build file:
 
