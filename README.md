@@ -248,7 +248,7 @@ On your merchant server,  convert the object structure received based on the Ful
 
 > Notes:
 
-> - The `androidpay.token` can be retrieved from the Full Wallet by. calling `fullWallet.getPaymentMethodToken().getToken()`
+> - The `androidpay.token` can be retrieved from the Full Wallet by calling `fullWallet.getPaymentMethodToken().getToken()`
 > - The `androidpay.token` is a JSON token in Base64 encoded format.
 > - The amount is in minor units.
 
