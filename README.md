@@ -4,7 +4,7 @@
 
 ##Introduction
 
-The documentation below will describe the Android Pay implementation as per [Google specifications](https://developers.google.com/android-pay/android/tutorial). The Adyen specific steps are included for a complete end-to-end integration. 
+The documentation below will describe the Android Pay implementation as per the [Android Pay specifications](https://developers.google.com/android-pay/android/tutorial) of Google. The Adyen specific steps are included in the flow to describe the complete end-to-end integration process. 
 
 ##Step 1 - Set up the sample and Google Play Services
 
@@ -84,7 +84,10 @@ This example demonstrates how to receive encrypted Android Pay payment credentia
                 .build();
 
 
-The `publicKey` can be retrieved from Adyen backoffice. If you need help in retrieving the `public key` please contact Adyen support at support@adyen.com.
+The `publicKey` can be retrieved from Adyen backoffice. If you need help in retrieving the `publicKey` please contact Adyen support at support@adyen.com.
+
+>Note:
+>After finalizing the testing phase, another 'publicKey' needs to be retrieved for the switch to live.
 
 ## Step 4 - Add a purchase button and request the Masked Wallet
 
@@ -163,7 +166,7 @@ After the app obtains the Masked Wallet, it should present a confirmation page s
             .build();
     mWalletFragment = SupportWalletFragment.newInstance(walletFragmentOptions);
 
-At this point the app has the shipping address and billing address, so it can calculate exact total purchase price and display it. This activity also allows the user to change the Android Pay payment instrument and change the shipping address for the purchase.
+At this point the app has the shipping address and billing address, so you can calculate the exact total purchase price and display it. This activity also allows the user to change the Android Pay payment instrument and change the shipping address for the purchase.
 
 ##Step 6 - Request the Full Wallet
 When the user confirms the order, you are ready to request the Full Wallet. The Full Wallet Request should have the total charge that you are requesting including exact shipping, handling and tax. You must include the `GoogleTransactionId` that you received in the Masked Wallet response.
@@ -208,7 +211,7 @@ Once you have retrieved the Full Wallet in the `onActivityResult()` callback, yo
 
 ## Step 8 - Send the payment token to Adyen for processing
 
-Based on the Full Wallet retrieved in step 7 build an object structure to be sent to your merchant server. 
+Based on the Full Wallet retrieved in step 7 you will build an object structure to be sent to your merchant server. 
 On your merchant server,  convert the object structure received based on the Full Wallet data to a JSON object with the following structure:
 
     {  
@@ -220,7 +223,7 @@ On your merchant server,  convert the object structure received based on the Ful
           }
        },
        "amount":{  
-          "currency":"EUR",
+          "currency":"USD",
           "amount":"100"
        },
        "merchantReference":"",
@@ -230,7 +233,7 @@ On your merchant server,  convert the object structure received based on the Ful
           "houseNoOrName":"600",
           "city":"San Francisco",
           "postalCode":"94107",
-          "stateOrProvince":"",
+          "stateOrProvince":"CA",
           "country":"US"
        },
        "billingAddress":{  
@@ -238,7 +241,7 @@ On your merchant server,  convert the object structure received based on the Ful
           "houseNoOrName":"600",
           "city":"San Francisco",
           "postalCode":"94107",
-          "stateOrProvince":"",
+          "stateOrProvince":"CA",
           "country":"US"
        }
     }
@@ -256,11 +259,11 @@ Send the test tokens to:
 
     https://pal-test.adyen.com/pal/servlet/Payment/V12/authorise
 
-Please not this functionality will not be available until March 5th. Please contact Adyen Support for more information.
+Please note that this functionality will not be available until March 5th. Please contact Adyen Support for more information.
 >Note:
 >If you are familiar with the Adyen Apple Pay integration this step will be the same and you will receive the same responses from our back-office platform.
 
 ## Step 10 - Live testing
 
-Testing against the Adyen live platform can only be done with live cards added to Android Pay application. We will support your live testing from March 9th.
+Testing against the Adyen live platform can only be done with live cards added to Android Pay application. We will support your live testing activities from March 9th onwards.
 
