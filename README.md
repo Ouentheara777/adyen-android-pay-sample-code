@@ -269,7 +269,7 @@ Send the test tokens to:
 
     https://pal-test.adyen.com/pal/servlet/Payment/V12/authorise
 
-We will support your testing activities from March 5th onwards. Please contact Adyen Support for more information.
+We will support your testing activities from March 7 onwards. Please contact Adyen Support for more information.
 >Note:
 >If you are familiar with the Adyen Apple Pay integration this step will be the same and you will receive the same responses from our back-office platform.
 
@@ -279,5 +279,5 @@ Once successfully completed the testing with the servers of Google and Adyen, yo
 
 Contact Adyen Support to request the 'publicKey' for live payment processing. Also review the [Android Pay setup guidelines] (https://developers.google.com/android-pay/android/tutorial) for obtaining live credentials of your application.
 
-We will support your live testing activities from March 9th onwards. Please contact Adyen Support for more information.
+We will support your live testing activities from March 9 onwards. Please contact Adyen Support for more information.
 
