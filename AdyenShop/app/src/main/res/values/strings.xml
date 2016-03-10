@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Adyen Shop</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- LIVE -->
+    <!--string name="public_key">BNOSBhtxjkzJxsRAmRPmB5nv0SF9zabH3H6wOAxyOEh8FH+mIfsPXB9Hj3Q0iPZrI/o4AzwC2yj+O0FCc732rY8=</string-->
+
+    <!-- TEST -->
+    <string name="public_key">BOjz2Z8KmO0/d9fP/t0x8xN6IqKbSwqUrZZTb68vTps0KrvP4nbpa1kFekN6lPEncm09ccX0kZBN3p2fOBMkUms=</string>
+
+    <!-- BOUKE -->
+    <!--string name="public_key">BJdV314YkIxt/saXUtzf/grLrHQxKK4jNxtk5GOFTL3fBXUrDpsw44FKJdP7I+1O96HmLo1M2ja+9P+Hu4FlMUA=</string-->
+
+    <string name="want_to_use_android_pay">Want to use Android Pay instead?\n Set it up using the Android Pay app, and you’ll be all set to pay.</string>
+
+    <string name="error_code">Error code: %d</string>
+    <string name="google_wallet_unavailable">Google Wallet is unavailable</string>
+    <string name="spending_limit_exceeded">You have exceeded your spending limit</string>
+
+    <string name="unsuccessful_tx">The transaction ended with the following error message: \n</string>
+    <string name="successful_tx">The transaction ended successfully</string>
+</resources>
