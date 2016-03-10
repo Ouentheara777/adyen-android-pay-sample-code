@@ -70,18 +70,4 @@ function createAdyenRequest(paymentData, callback) {
             country: paymentData.billingAddress.country
         }
     }
-    
-    var auth = {user: "", pass: ""};
-    
-    // var url = 'https://pal-test.adyen.com/pal/servlet/Payment/V12/authorise'
-    
-    // request.post({url: url, auth: auth, json: data}, function (error, response, body){
-    //     console.log('Adyen response: ', response.statusCode, body, error);
-       
-    //     if (!error && response.statusCode == 200) {
-    //         callback(body, null);
-    //     } else {
-    //         callback(null, error);
-    //     } 
-    // });
 }

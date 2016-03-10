@@ -97,6 +97,8 @@ This example demonstrates how to receive encrypted Android Pay payment credentia
 
 The `publicKey` can be retrieved from Adyen backoffice. If you need help in retrieving the `publicKey` please contact Adyen support at support@adyen.com.
 
+Until the test environment of Adyen is available, we advice to use the Google public test key for making the masked wallet request. This can be retrieved from the [Android Pay github of Google](https://github.com/android-pay/androidpay-quickstart/blob/master/app/src/main/res/values/ids.xml).
+
 >Note:
 >After finalizing the testing phase, another 'publicKey' needs to be retrieved for the switch to live.
 
@@ -269,7 +271,7 @@ Send the test tokens to:
 
     https://pal-test.adyen.com/pal/servlet/Payment/V12/authorise
 
-We will support your testing activities from March 5th onwards. Please contact Adyen Support for more information.
+We will support your testing activities from March 7 onwards. Please contact Adyen Support for more information.
 >Note:
 >If you are familiar with the Adyen Apple Pay integration this step will be the same and you will receive the same responses from our back-office platform.
 
@@ -279,5 +281,5 @@ Once successfully completed the testing with the servers of Google and Adyen, yo
 
 Contact Adyen Support to request the 'publicKey' for live payment processing. Also review the [Android Pay setup guidelines] (https://developers.google.com/android-pay/android/tutorial) for obtaining live credentials of your application.
 
-We will support your live testing activities from March 9th onwards. Please contact Adyen Support for more information.
+We will support your live testing activities from March 9 onwards. Please contact Adyen Support for more information.
 
