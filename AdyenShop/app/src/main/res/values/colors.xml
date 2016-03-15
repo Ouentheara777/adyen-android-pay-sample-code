@@ -6,4 +6,13 @@
     <color name="black">#000000</color>
     <color name="mint">#24D683</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="separator">#FF909090</color>
+    <color name="promo_background">#B1B7C1</color>
+    <color name="promo_item_label_color">#BBBBBB</color>
+    <color name="promo_item_label_background">#99444444</color>
+    <color name="wallet_details_color">#000000</color>
+    <color name="wallet_dark_grey">#666666</color>
+    <color name="adyen_shop_button_text">#000000</color>
+    <color name="adyen_shop_white">#FFFFFF</color>
 </resources>

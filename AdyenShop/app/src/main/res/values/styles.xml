@@ -17,4 +17,22 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AdyenShopWalletFragmentDetailsTextAppearance">
+        <item name="android:textColor">@color/wallet_details_color</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="AdyenShopWalletFragmentDetailsHeaderTextAppearance"
+        parent="AdyenShopWalletFragmentDetailsTextAppearance">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ButtonAdyenShop" parent="android:Widget.Button">
+        <item name="android:minHeight">@dimen/adyen_shop_button_min_width</item>
+        <item name="android:minWidth">@dimen/adyen_shop_button_max_width</item>
+        <item name="android:textColor">@color/adyen_shop_button_text</item>
+        <item name="android:textSize">@dimen/adyen_shop_button_text</item>
+    </style>
+
 </resources>

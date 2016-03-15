@@ -26,6 +26,8 @@
         <activity android:name=".OrderConfirmationActivity" android:screenOrientation="locked"/>
 
         <activity android:name=".OrderCompleteActivity" android:screenOrientation="locked"/>
+
+        <activity android:name=".ConfirmationActivity" android:screenOrientation="locked"/>
     </application>
 
 </manifest>

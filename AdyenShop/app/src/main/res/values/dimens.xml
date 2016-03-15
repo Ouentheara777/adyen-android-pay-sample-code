@@ -3,4 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="adyen_shop_button_min_width">48dp</dimen>
+    <dimen name="adyen_shop_button_max_width">64dp</dimen>
+    <dimen name="adyen_shop_button_text">18sp</dimen>
 </resources>

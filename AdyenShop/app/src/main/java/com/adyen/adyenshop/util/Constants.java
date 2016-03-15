@@ -18,4 +18,6 @@ public class Constants {
 
     public static final String MERCHANT_NAME = "Adyen Shop";
 
+    public static final String EXTRA_MASKED_WALLET = "EXTRA_MASKED_WALLET";
+
 }

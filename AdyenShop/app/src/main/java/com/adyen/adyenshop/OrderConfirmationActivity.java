@@ -18,19 +18,10 @@ import com.adyen.adyenshop.adapter.OrderItemsAdapter;
 import com.adyen.adyenshop.model.Product;
 import com.adyen.adyenshop.util.Constants;
 import com.adyen.adyenshop.util.WalletUtil;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.BooleanResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.wallet.FullWallet;
-import com.google.android.gms.wallet.FullWalletRequest;
 import com.google.android.gms.wallet.MaskedWallet;
 import com.google.android.gms.wallet.MaskedWalletRequest;
 import com.google.android.gms.wallet.Wallet;
@@ -40,9 +31,6 @@ import com.google.android.gms.wallet.fragment.WalletFragmentInitParams;
 import com.google.android.gms.wallet.fragment.WalletFragmentMode;
 import com.google.android.gms.wallet.fragment.WalletFragmentOptions;
 import com.google.android.gms.wallet.fragment.WalletFragmentStyle;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +42,6 @@ public class OrderConfirmationActivity extends AppCompatActivity implements Goog
 
     private static final String tag = OrderConfirmationActivity.class.getSimpleName();
     private static final int REQUEST_CODE_MASKED_WALLET = 1001;
-    public static final int REQUEST_CODE_RESOLVE_LOAD_FULL_WALLET = 1004;
 
     private OrderItemsAdapter orderItemsAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -221,90 +208,6 @@ public class OrderConfirmationActivity extends AppCompatActivity implements Goog
                         break;
                 }
                 break;
-            case REQUEST_CODE_RESOLVE_LOAD_FULL_WALLET:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        if (data != null && data.hasExtra(WalletConstants.EXTRA_FULL_WALLET)) {
-                            FullWallet fullWallet = data.getParcelableExtra(WalletConstants.EXTRA_FULL_WALLET);
-                            // the full wallet can now be used to process the customer's payment
-                            // send the wallet info up to server to process, and to get the result
-                            // for sending a transaction status
-                            /*
-                            * Building the object to be sent to the merchant server
-                            * */
-                            final JSONObject paymentData = new JSONObject();
-                            JSONObject additionalData = new JSONObject();
-                            try {
-                                additionalData.put("token", fullWallet.getPaymentMethodToken().getToken());
-                                paymentData.put("additionalData", additionalData);
-
-                                JSONObject amount = new JSONObject();
-                                amount.put("currency", "USD");
-                                amount.put("amount", String.valueOf(cartTotal));
-                                paymentData.put("amount", amount);
-
-                                paymentData.put("merchantReference", "AdyenShop");
-                                paymentData.put("shopperEmail", fullWallet.getEmail());
-
-                                JSONObject deliveryAddress = new JSONObject();
-                                deliveryAddress.put("street", fullWallet.getBuyerShippingAddress().getAddress1());
-                                deliveryAddress.put("houseNoOrName", fullWallet.getBuyerShippingAddress().getAddress2());
-                                deliveryAddress.put("city", fullWallet.getBuyerShippingAddress().getLocality());
-                                deliveryAddress.put("postalCode", fullWallet.getBuyerShippingAddress().getPostalCode());
-                                deliveryAddress.put("stateOrProvince", fullWallet.getBuyerShippingAddress().getAddress3());
-                                deliveryAddress.put("country", fullWallet.getBuyerShippingAddress().getCountryCode());
-                                paymentData.put("deliveryAddress", deliveryAddress);
-
-                                JSONObject billingAddress = new JSONObject();
-                                billingAddress.put("street", fullWallet.getBuyerBillingAddress().getAddress1());
-                                billingAddress.put("houseNoOrName", fullWallet.getBuyerBillingAddress().getAddress2());
-                                billingAddress.put("city", fullWallet.getBuyerBillingAddress().getLocality());
-                                billingAddress.put("postalCode", fullWallet.getBuyerBillingAddress().getPostalCode());
-                                billingAddress.put("stateOrProvince", fullWallet.getBuyerBillingAddress().getAddress3());
-                                billingAddress.put("country", fullWallet.getBuyerBillingAddress().getCountryCode());
-                                paymentData.put("billingAddress", billingAddress);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            /*
-                            * Send data to merchant server
-                            * */
-                            //String url = "http://192.168.10.126:8080/api/payment";
-                            String url = "http://192.168.19.98:8080/api/payment";
-                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                                    (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            Log.d(tag, "Merchant server response: " + response.toString());
-                                            //Process the response received from the merchant server
-                                            fetchTransactionStatus(true);
-                                        }
-                                    }, new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            VolleyLog.d(tag, "Error: " + error.getMessage());
-                                            //Process the response received from the merchant server
-                                            fetchTransactionStatus(false);
-                                        }
-                                    }) {
-                                @Override
-                                public byte[] getBody() {
-                                    return paymentData.toString().getBytes();
-                                }
-                            };
-                            RequestQueue requestQueue = Volley.newRequestQueue(this);
-                            requestQueue.add(jsonObjectRequest);
-                        }
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        // nothing to do here
-                        break;
-                    default:
-                        handleError(errorCode);
-                        break;
-                }
-                break;
             case WalletConstants.RESULT_ERROR:
                 handleError(errorCode);
                 break;
@@ -315,36 +218,10 @@ public class OrderConfirmationActivity extends AppCompatActivity implements Goog
     }
 
     private void confirmPurchase() {
-        getFullWallet();
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.show();
-    }
-
-    private void getFullWallet() {
-        FullWalletRequest fullWalletRequest = WalletUtil.createFullWalletRequest(productsList,
-                String.valueOf(orderTotal),
-                mMaskedWallet.getGoogleTransactionId());
-
-        // [START load_full_wallet]
-        Wallet.Payments.loadFullWallet(mGoogleApiClient, fullWalletRequest,
-                REQUEST_CODE_RESOLVE_LOAD_FULL_WALLET);
-        // [END load_full_wallet]
-    }
-
-    private void fetchTransactionStatus(boolean successfulOrder) {
-        if (mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-
-        Intent intent = new Intent(this, OrderCompleteActivity.class);
-
-        if(successfulOrder) {
-            intent.putExtra("completionMessage", getString(R.string.successful_tx));
-        } else {
-            intent.putExtra("completionMessage", getString(R.string.unsuccessful_tx));
-        }
-
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(this, ConfirmationActivity.class);
+        intent.putExtra(Constants.EXTRA_MASKED_WALLET, mMaskedWallet);
+        intent.putExtra("orderTotal", orderTotal);
+        intent.putExtra("itemsInCart", productsList.toArray(new Product[productsList.size()]));
         startActivity(intent);
     }
 

@@ -19,4 +19,6 @@
 
     <string name="unsuccessful_tx">The transaction ended with the following error message: \n</string>
     <string name="successful_tx">The transaction ended successfully</string>
+
+    <string name="loading">Loading&#8230;</string>
 </resources>
