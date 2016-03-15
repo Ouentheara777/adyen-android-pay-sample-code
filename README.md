@@ -11,11 +11,11 @@
 	- [Step 6 - Request the Full Wallet](#step-6-request-the-full-wallet)
 	- [Step 7 - Retrieve the Full Wallet](#step-7-retrieve-the-full-wallet)
 	- [Step 8 - Send the payment token to Adyen for processing](#step-8-send-the-payment-token-to-adyen-for-processing)
-	- [Step 9 - Testing](#step-9-testing)
+	- [Step 9 - Switch to live](#step-9-testing)
 
 ##Introduction
 
-The documentation below will describe the Android Pay implementation as per the [Android Pay specifications](https://developers.google.com/android-pay/android/tutorial) of Google. The Adyen specific steps are included in the flow to describe the complete end-to-end integration process. 
+The documentation below will describe the Android Pay implementation as per the [Android Pay specifications](https://developers.google.com/android-pay/android/tutorial) of Google. The Adyen specific steps are included in the flow to describe the complete end-to-end integration process.
 
 ##Step 1 - Set up the sample and Google Play Services
 
@@ -45,7 +45,7 @@ Before starting the Android Pay flow, use the `isReadyToPay` method to check whe
                 @Override
                 public void onResult(@NonNull BooleanResult booleanResult) {
                     hideProgressDialog();
-    
+
                     if (booleanResult.getStatus().isSuccess()) {
                         if (booleanResult.getValue()) {
                             // Show Android Pay buttons and hide regular checkout button
@@ -110,7 +110,7 @@ Next, construct an instance of WalletFragment to add to your checkout activity:
             .setBuyButtonText(WalletFragmentStyle.BuyButtonText.BUY_WITH)
             .setBuyButtonAppearance(WalletFragmentStyle.BuyButtonAppearance.ANDROID_PAY_DARK)
             .setBuyButtonWidth(WalletFragmentStyle.Dimension.MATCH_PARENT);
-    
+
     WalletFragmentOptions walletFragmentOptions = WalletFragmentOptions.newBuilder()
             .setEnvironment(Constants.WALLET_ENVIRONMENT)
             .setFragmentStyle(walletFragmentStyle)
@@ -126,7 +126,7 @@ When you initialize the purchase fragment, pass in the `maskedWalletRequest` tha
             .setMaskedWalletRequestCode(REQUEST_CODE_MASKED_WALLET)
             .setAccountName(accountName);
     mWalletFragment.initialize(startParamsBuilder.build());
-    
+
     // add Wallet fragment to the UI
     getSupportFragmentManager().beginTransaction()
             .replace(R.id.dynamic_wallet_button_fragment, mWalletFragment)
@@ -218,13 +218,13 @@ Once you have retrieved the Full Wallet in the `onActivityResult()` callback, yo
 
     // Get payment method token
     PaymentMethodToken token = fullWallet.getPaymentMethodToken();
-    
+
     // Get the JSON of the token object as a String
     String tokenJSON = token.getToken();
 
 ## Step 8 - Send the payment token to Adyen for processing (test)
 
-Based on the Full Wallet retrieved in step 7 you will build an object structure to be sent to your merchant server. 
+Based on the Full Wallet retrieved in step 7 you will build an object structure to be sent to your merchant server.
 On your merchant server,  convert the object structure received based on the Full Wallet data to a JSON object with the following structure:
 
     {  
@@ -271,15 +271,21 @@ Send the test tokens to:
 
     https://pal-test.adyen.com/pal/servlet/Payment/V12/authorise
 
+#### Test Cards and Custom Androidpay Tokens
+Since you can only board real Credit Cards on Androidpay and Google uses their own test cards, payments sent to the Adyen test platform will receive the message:
+
+"Refused (This is not a testCard)"
+
+If you want to test payments that will not be refused, you can use the AndroidPayTokenCreator to create custom Androidpay tokens. Just be sure to replace the dpan field (Credit Card number) with a test card number that is recognized by our test platform.
+
 We will support your testing activities from March 7 onwards. Please contact Adyen Support for more information.
 >Note:
 >If you are familiar with the Adyen Apple Pay integration this step will be the same and you will receive the same responses from our back-office platform.
 
 ## Step 9 - Switch to live
 
-Once successfully completed the testing with the servers of Google and Adyen, you are ready for the switch to live. 
+Once successfully completed the testing with the servers of Google and Adyen, you are ready for the switch to live.
 
 Contact Adyen Support to request the 'publicKey' for live payment processing. Also review the [Android Pay setup guidelines] (https://developers.google.com/android-pay/android/tutorial) for obtaining live credentials of your application.
 
 We will support your live testing activities from March 9 onwards. Please contact Adyen Support for more information.
-
