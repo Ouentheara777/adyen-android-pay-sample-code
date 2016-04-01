@@ -141,44 +141,48 @@ public class FullWalletConfirmationFragment extends Fragment implements
                             final JSONObject paymentData = new JSONObject();
                             JSONObject additionalData = new JSONObject();
                             try {
-                                additionalData.put("token", fullWallet.getPaymentMethodToken().getToken());
+                                additionalData.put("androidpay.token", fullWallet.getPaymentMethodToken().getToken());
                                 paymentData.put("additionalData", additionalData);
 
                                 JSONObject amount = new JSONObject();
                                 amount.put("currency", "USD");
-                                amount.put("amount", String.valueOf(orderTotal));
+                                amount.put("value", String.valueOf((int) (orderTotal * 100)));
                                 paymentData.put("amount", amount);
 
-                                paymentData.put("merchantReference", "AdyenShop");
+                                paymentData.put("merchantAccount", "TestMerchantAP");
+                                paymentData.put("reference", "AdyenShop");
                                 paymentData.put("shopperEmail", fullWallet.getEmail());
 
-                                JSONObject deliveryAddress = new JSONObject();
-                                deliveryAddress.put("street", fullWallet.getBuyerShippingAddress().getAddress1());
-                                deliveryAddress.put("houseNoOrName", fullWallet.getBuyerShippingAddress().getAddress2());
-                                deliveryAddress.put("city", fullWallet.getBuyerShippingAddress().getLocality());
-                                deliveryAddress.put("postalCode", fullWallet.getBuyerShippingAddress().getPostalCode());
-                                deliveryAddress.put("stateOrProvince", fullWallet.getBuyerShippingAddress().getAddress3());
-                                deliveryAddress.put("country", fullWallet.getBuyerShippingAddress().getCountryCode());
-                                paymentData.put("deliveryAddress", deliveryAddress);
+//                                JSONObject deliveryAddress = new JSONObject();
+//                                deliveryAddress.put("street", fullWallet.getBuyerShippingAddress().getAddress1());
+//                                deliveryAddress.put("houseNoOrName", fullWallet.getBuyerShippingAddress().getAddress2());
+//                                deliveryAddress.put("city", fullWallet.getBuyerShippingAddress().getLocality());
+//                                deliveryAddress.put("postalCode", fullWallet.getBuyerShippingAddress().getPostalCode());
+//                                deliveryAddress.put("stateOrProvince", fullWallet.getBuyerShippingAddress().getAddress3());
+//                                deliveryAddress.put("country", fullWallet.getBuyerShippingAddress().getCountryCode());
+//                                paymentData.put("deliveryAddress", deliveryAddress);
+//
+//                                JSONObject billingAddress = new JSONObject();
+//                                billingAddress.put("street", fullWallet.getBuyerBillingAddress().getAddress1());
+//                                billingAddress.put("houseNoOrName", fullWallet.getBuyerBillingAddress().getAddress2());
+//                                billingAddress.put("city", fullWallet.getBuyerBillingAddress().getLocality());
+//                                billingAddress.put("postalCode", fullWallet.getBuyerBillingAddress().getPostalCode());
+//                                billingAddress.put("stateOrProvince", fullWallet.getBuyerBillingAddress().getAddress3());
+//                                billingAddress.put("country", fullWallet.getBuyerBillingAddress().getCountryCode());
+//                                paymentData.put("billingAddress", billingAddress);
 
-                                JSONObject billingAddress = new JSONObject();
-                                billingAddress.put("street", fullWallet.getBuyerBillingAddress().getAddress1());
-                                billingAddress.put("houseNoOrName", fullWallet.getBuyerBillingAddress().getAddress2());
-                                billingAddress.put("city", fullWallet.getBuyerBillingAddress().getLocality());
-                                billingAddress.put("postalCode", fullWallet.getBuyerBillingAddress().getPostalCode());
-                                billingAddress.put("stateOrProvince", fullWallet.getBuyerBillingAddress().getAddress3());
-                                billingAddress.put("country", fullWallet.getBuyerBillingAddress().getCountryCode());
-                                paymentData.put("billingAddress", billingAddress);
+                                Log.d(tag, "Payment data: " + paymentData.toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+
 
                             /*
                             * Send data to merchant server
                             * */
                             //String url = "http://192.168.10.126:8080/api/payment";
-                            String url = "http://192.168.19.98:8080/api/payment";
-                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                            String url = "https://pal-live.adyen.com/pal/servlet/Payment/V12/authorise";
+                            AuthRequest jsonObjectRequest = new AuthRequest
                                     (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
                                         @Override
                                         public void onResponse(JSONObject response) {
@@ -190,6 +194,10 @@ public class FullWalletConfirmationFragment extends Fragment implements
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
                                             VolleyLog.d(tag, "Error: " + error.getMessage());
+                                            if(error.networkResponse != null && error.networkResponse.data != null) {
+                                                Log.d(tag, "Merchant server response: " + (new String(error.networkResponse.data)));
+                                            }
+
                                             //Process the response received from the merchant server
                                             fetchTransactionStatus(false);
                                         }
