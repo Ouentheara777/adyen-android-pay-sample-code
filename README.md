@@ -230,9 +230,9 @@ On your merchant server,  convert the object structure received based on the Ful
     {  
        "additionalData":{  
           "androidpay.token":{  
-             "ephemeralPublicKey":"BDv6Q8J8kMtclU\\/IK9SQX5GL3Ab7vTpsmywBj9NZ71oMBqDLWxcIUHSuMbkfJFYyBKO6ZmBnA8BR9t4gvhDRTZw=",
-             "encryptedMessage":"AiHLHVqmN6ECuUU82WczfXYPYPVXg\\/vX2UWyq8FTr4kIfl5RsqcebhDHzhfCU7AqsdAIIpIxAxJbvEXgUY1NvX9rCT+7cimw9me0x2pO8i95kj1dVn6bg3S9PbmyFTNX\\/5rBWWdmqdIvhvMkj9vksqKn9\\/BQ8hnjusZVESnXfiDxbJd6GZNQ",
-             "tag":"tZkPRlUCbnuqqLgLCing4txQRYhDz+xgcxiQUuwztcQ="
+             "ephemeralPublicKey":"==Android Pay Specific==",
+             "encryptedMessage":"==Android Pay Specific==",
+             "tag":"==Android Pay Specific=="
           }
        },
        "amount":{  
