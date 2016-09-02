@@ -276,9 +276,8 @@ Since you can only board real Credit Cards on Androidpay and Google uses their o
 
 "Refused (This is not a testCard)"
 
-If you want to test payments that will not be refused, you can use the AndroidPayTokenCreator to create custom Androidpay tokens. Just be sure to replace the dpan field (Credit Card number) with a test card number that is recognized by our test platform.
+Please contact Adyen Support for more background or information.
 
-We will support your testing activities from March 7 onwards. Please contact Adyen Support for more information.
 >Note:
 >If you are familiar with the Adyen Apple Pay integration this step will be the same and you will receive the same responses from our back-office platform.
 
