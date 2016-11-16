@@ -230,9 +230,9 @@ On your merchant server,  convert the object structure received based on the Ful
     {  
        "additionalData":{  
           "androidpay.token":{  
-             "ephemeralPublicKey":"BDv6Q8J8kMtclU\\/IK9SQX5GL3Ab7vTpsmywBj9NZ71oMBqDLWxcIUHSuMbkfJFYyBKO6ZmBnA8BR9t4gvhDRTZw=",
-             "encryptedMessage":"AiHLHVqmN6ECuUU82WczfXYPYPVXg\\/vX2UWyq8FTr4kIfl5RsqcebhDHzhfCU7AqsdAIIpIxAxJbvEXgUY1NvX9rCT+7cimw9me0x2pO8i95kj1dVn6bg3S9PbmyFTNX\\/5rBWWdmqdIvhvMkj9vksqKn9\\/BQ8hnjusZVESnXfiDxbJd6GZNQ",
-             "tag":"tZkPRlUCbnuqqLgLCing4txQRYhDz+xgcxiQUuwztcQ="
+             "ephemeralPublicKey":"==Android Pay Specific==",
+             "encryptedMessage":"==Android Pay Specific==",
+             "tag":"==Android Pay Specific=="
           }
        },
        "amount":{  
@@ -276,9 +276,8 @@ Since you can only board real Credit Cards on Androidpay and Google uses their o
 
 "Refused (This is not a testCard)"
 
-If you want to test payments that will not be refused, you can use the AndroidPayTokenCreator to create custom Androidpay tokens. Just be sure to replace the dpan field (Credit Card number) with a test card number that is recognized by our test platform.
+Please contact Adyen Support for more background or information.
 
-We will support your testing activities from March 7 onwards. Please contact Adyen Support for more information.
 >Note:
 >If you are familiar with the Adyen Apple Pay integration this step will be the same and you will receive the same responses from our back-office platform.
 
