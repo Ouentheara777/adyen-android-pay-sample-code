@@ -7,7 +7,9 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 
 import com.adyen.adyenshop.adapter.OrderItemsAdapter;
 import com.adyen.adyenshop.model.Product;
@@ -27,6 +29,8 @@ import java.util.List;
  * Created by andrei on 3/14/16.
  */
 public class ConfirmationActivity extends AdyenShopFragmentActivity {
+
+    private static final String tag = ConfirmationActivity.class.getSimpleName();
 
     private static final int REQUEST_CODE_CHANGE_MASKED_WALLET = 1002;
     private SupportWalletFragment mWalletFragment;
@@ -128,6 +132,12 @@ public class ConfirmationActivity extends AdyenShopFragmentActivity {
             products.add((Product)productsInCart[i]);
         }
         return products;
+    }
+
+    public void authAndCapture(View view) {
+        Log.i(tag, "AUTH + CAPTURE was chosen");
+        ((FullWalletConfirmationFragment) getResultTargetFragment()).setIsAuthAndCapture(true);
+        ((FullWalletConfirmationFragment) getResultTargetFragment()).confirmPurchase();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.adyen.adyenshop.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.adyen.adyenshop.R;
 import com.adyen.adyenshop.model.Product;
+import com.adyen.adyenshop.util.CurrenciesEnum;
+import com.adyen.adyenshop.util.PreferencesUtil;
 
 import java.util.List;
 
@@ -18,10 +21,13 @@ import java.util.List;
  */
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ProductsViewHolder> {
 
+    private Context context;
+
     private List<Product> mDataset;
 
-    public ProductsAdapter(List<Product> myDataset) {
-        mDataset = myDataset;
+    public ProductsAdapter(List<Product> myDataset, Context context) {
+        this.mDataset = myDataset;
+        this.context = context;
     }
 
     public static class ProductsViewHolder extends RecyclerView.ViewHolder {
@@ -52,7 +58,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
         productsViewHolder.mProductIcon.setImageResource(mDataset.get(position).getPhotoId());
         productsViewHolder.mProductIcon.setTag(mDataset.get(position).getPhotoId());
         productsViewHolder.mProductName.setText(mDataset.get(position).getName());
-        productsViewHolder.mProductPrice.setText("$ " + String.valueOf(mDataset.get(position).getPrice()));
+        productsViewHolder.mProductPrice.setText(getCurrencySymbol() + String.valueOf(mDataset.get(position).getPrice()));
     }
 
     @Override
@@ -65,4 +71,20 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
         super.onAttachedToRecyclerView(recyclerView);
     }
 
+    public String getCurrencySymbol() {
+        String currency = PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD");
+        if(currency.equals(CurrenciesEnum.USD.toString())) {
+            return CurrenciesEnum.USD.getSymbol();
+        }
+        if(currency.equals(CurrenciesEnum.EUR.toString())) {
+            return CurrenciesEnum.EUR.getSymbol();
+        }
+        if(currency.equals(CurrenciesEnum.GBP.toString())) {
+            return CurrenciesEnum.GBP.getSymbol();
+        }
+        if(currency.equals(CurrenciesEnum.BRL.toString())) {
+            return CurrenciesEnum.BRL.getSymbol();
+        }
+        return CurrenciesEnum.USD.getSymbol();
+    }
 }

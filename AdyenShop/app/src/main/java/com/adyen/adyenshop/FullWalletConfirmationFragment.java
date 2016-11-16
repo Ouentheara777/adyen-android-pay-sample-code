@@ -21,7 +21,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -55,6 +54,8 @@ public class FullWalletConfirmationFragment extends Fragment implements
 
     private List<Product> productsList;
     private float orderTotal;
+    private boolean isAuthAndCapture = false;
+    private String merchantServerResponse;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,12 +81,9 @@ public class FullWalletConfirmationFragment extends Fragment implements
     }
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         initializeProgressDialog();
-        View view = inflater.inflate(R.layout.fragment_full_wallet_confirmation, container,
-                false);
+        View view = inflater.inflate(R.layout.fragment_full_wallet_confirmation, container, false);
 
         mConfirmButton = (Button) view.findViewById(R.id.button_place_order);
         mConfirmButton.setOnClickListener(this);
@@ -132,6 +130,7 @@ public class FullWalletConfirmationFragment extends Fragment implements
                     case Activity.RESULT_OK:
                         if (data != null && data.hasExtra(WalletConstants.EXTRA_FULL_WALLET)) {
                             FullWallet fullWallet = data.getParcelableExtra(WalletConstants.EXTRA_FULL_WALLET);
+                            fullWallet.getProxyCard().getPan();
                             // the full wallet can now be used to process the customer's payment
                             // send the wallet info up to server to process, and to get the result
                             // for sending a transaction status
@@ -148,39 +147,23 @@ public class FullWalletConfirmationFragment extends Fragment implements
                                 amount.put("currency", "USD");
                                 amount.put("value", String.valueOf((int) (orderTotal * 100)));
                                 paymentData.put("amount", amount);
-
-                                paymentData.put("merchantAccount", "TestMerchantAP");
-                                paymentData.put("reference", "AdyenShop");
-                                paymentData.put("shopperEmail", fullWallet.getEmail());
-
-//                                JSONObject deliveryAddress = new JSONObject();
-//                                deliveryAddress.put("street", fullWallet.getBuyerShippingAddress().getAddress1());
-//                                deliveryAddress.put("houseNoOrName", fullWallet.getBuyerShippingAddress().getAddress2());
-//                                deliveryAddress.put("city", fullWallet.getBuyerShippingAddress().getLocality());
-//                                deliveryAddress.put("postalCode", fullWallet.getBuyerShippingAddress().getPostalCode());
-//                                deliveryAddress.put("stateOrProvince", fullWallet.getBuyerShippingAddress().getAddress3());
-//                                deliveryAddress.put("country", fullWallet.getBuyerShippingAddress().getCountryCode());
-//                                paymentData.put("deliveryAddress", deliveryAddress);
-//
-//                                JSONObject billingAddress = new JSONObject();
-//                                billingAddress.put("street", fullWallet.getBuyerBillingAddress().getAddress1());
-//                                billingAddress.put("houseNoOrName", fullWallet.getBuyerBillingAddress().getAddress2());
-//                                billingAddress.put("city", fullWallet.getBuyerBillingAddress().getLocality());
-//                                billingAddress.put("postalCode", fullWallet.getBuyerBillingAddress().getPostalCode());
-//                                billingAddress.put("stateOrProvince", fullWallet.getBuyerBillingAddress().getAddress3());
-//                                billingAddress.put("country", fullWallet.getBuyerBillingAddress().getCountryCode());
-//                                paymentData.put("billingAddress", billingAddress);
-
-                                Log.d(tag, "Payment data: " + paymentData.toString());
+                                if(isAuthAndCapture) {
+                                    paymentData.put("merchantAccount", "GooglePOSUK");
+                                    paymentData.put("reference", "AdyenShop_Auth_Capture");
+                                    paymentData.put("shopperEmail", fullWallet.getEmail());
+                                    Log.i(tag, "Adding parameter captureDelayHours");
+                                    paymentData.put("captureDelayHours", 0);
+                                } else {
+                                    paymentData.put("merchantAccount", "GooglePOSUK");
+                                    paymentData.put("reference", "AdyenShop_Auth");
+                                    paymentData.put("shopperEmail", fullWallet.getEmail());
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
+                            Log.i(tag, "=======>" + paymentData.toString());
 
-                            /*
-                            * Send data to merchant server
-                            * */
-                            //String url = "http://192.168.10.126:8080/api/payment";
                             String url = "https://pal-live.adyen.com/pal/servlet/Payment/V12/authorise";
                             AuthRequest jsonObjectRequest = new AuthRequest
                                     (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
@@ -195,6 +178,7 @@ public class FullWalletConfirmationFragment extends Fragment implements
                                         public void onErrorResponse(VolleyError error) {
                                             VolleyLog.d(tag, "Error: " + error.getMessage());
                                             if(error.networkResponse != null && error.networkResponse.data != null) {
+                                                merchantServerResponse = new String(error.networkResponse.data);
                                                 Log.d(tag, "Merchant server response: " + (new String(error.networkResponse.data)));
                                             }
 
@@ -261,7 +245,7 @@ public class FullWalletConfirmationFragment extends Fragment implements
         }
     }
 
-    private void confirmPurchase() {
+    public void confirmPurchase() {
         getFullWallet();
         mProgressDialog.setCancelable(false);
         mProgressDialog.show();
@@ -288,7 +272,7 @@ public class FullWalletConfirmationFragment extends Fragment implements
         if(successfulOrder) {
             intent.putExtra("completionMessage", getString(R.string.successful_tx));
         } else {
-            intent.putExtra("completionMessage", getString(R.string.unsuccessful_tx));
+            intent.putExtra("completionMessage", getString(R.string.unsuccessful_tx) + "\n" + merchantServerResponse);
         }
 
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -309,5 +293,9 @@ public class FullWalletConfirmationFragment extends Fragment implements
             products.add((Product)productsInCart[i]);
         }
         return products;
+    }
+
+    public void setIsAuthAndCapture(boolean isAuthAndCapture) {
+        this.isAuthAndCapture = isAuthAndCapture;
     }
 }

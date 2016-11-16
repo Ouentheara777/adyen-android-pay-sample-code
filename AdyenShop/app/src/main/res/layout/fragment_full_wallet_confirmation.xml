@@ -10,6 +10,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:text="Confirm order" />
+        android:text="Confirm order (Auth)" />
+
+    <Button
+        android:id="@+id/button_place_order_capture"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:onClick="authAndCapture"
+        android:text="Confirm order (Auth + Capture)" />
 
 </LinearLayout>

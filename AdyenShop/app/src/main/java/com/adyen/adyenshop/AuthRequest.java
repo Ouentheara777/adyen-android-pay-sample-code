@@ -27,7 +27,8 @@ public class AuthRequest extends JsonObjectRequest {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        return createBasicAuthHeader("ws_XXX@Company.TestCompany", "PASSWORD");
+            //return createBasicAuthHeader("ws_891138@Company.GoogleCommerce", "}9w8]]!3h[(SgB==%B@#7!(2D");
+        return createBasicAuthHeader("ws_578310@Company.TestCompany", "abKekskbj5un");
     }
 
     Map<String, String> createBasicAuthHeader(String username, String password) {
@@ -39,4 +40,13 @@ public class AuthRequest extends JsonObjectRequest {
 
         return headerMap;
     }
+
+    //for Taras' merchant server
+//    Map<String, String> createBasicAuthHeader(String username, String password) {
+//        Map<String, String> headerMap = new HashMap<String, String>();
+//
+//        headerMap.put("Authorization", "Bearer 1811645d-87a1-4e47-833a-78a1d5f6d4");
+//
+//        return headerMap;
+//    }
 }

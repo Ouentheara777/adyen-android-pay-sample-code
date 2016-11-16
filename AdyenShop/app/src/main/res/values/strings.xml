@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">Adyen Shop</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_currency">Currency</string>
 
     <!-- LIVE -->
-    <!--string name="public_key">BNOSBhtxjkzJxsRAmRPmB5nv0SF9zabH3H6wOAxyOEh8FH+mIfsPXB9Hj3Q0iPZrI/o4AzwC2yj+O0FCc732rY8=</string-->
+    <!--string name="public_key">BE+Dr5JbSO6M3LRJt4Xvv0h3NIlbeePpLEK0LZ39WhjJedJAcnI8dnTpJAcicR33R0LnRmQgV+04akGy/j7zWV0=</string-->
+    <string name="public_key">BE+Dr5JbSO6M3LRJt4Xvv0h3NIlbeePpLEK0LZ39WhjJedJAcnI8dnTpJAcicR33R0LnRmQgV+04akGy/j7zWV0=</string>
+    <!-- LIVE GOOGLE -->
+    <!--string name="public_key">BKYH/X57Y7JiOolXpoow2GLBfYLcl7CMhfeV5hYl9WrCUd+D9Pd/ZvsZEfJAtjaSMw7mfLkIZch0EqeYyJs9Ikg=</string-->
 
     <!-- TEST -->
-    <string name="public_key">BOjz2Z8KmO0/d9fP/t0x8xN6IqKbSwqUrZZTb68vTps0KrvP4nbpa1kFekN6lPEncm09ccX0kZBN3p2fOBMkUms=</string>
+    <!--string name="public_key">BOjz2Z8KmO0/d9fP/t0x8xN6IqKbSwqUrZZTb68vTps0KrvP4nbpa1kFekN6lPEncm09ccX0kZBN3p2fOBMkUms=</string-->
 
     <!-- BOUKE -->
     <!--string name="public_key">BJdV314YkIxt/saXUtzf/grLrHQxKK4jNxtk5GOFTL3fBXUrDpsw44FKJdP7I+1O96HmLo1M2ja+9P+Hu4FlMUA=</string-->
@@ -21,4 +24,8 @@
     <string name="successful_tx">The transaction ended successfully</string>
 
     <string name="loading">Loading&#8230;</string>
+    
+    <string name="select_currency">Select currency</string>
+    <string name="currency_preferences_file_name">currency_preferences</string>
+    <string name="active_currency">activeCurrency</string>
 </resources>
