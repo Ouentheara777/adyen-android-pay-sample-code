@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.adyen.adyenshop.adapter.OrderItemsAdapter;
 import com.adyen.adyenshop.model.Product;
 import com.adyen.adyenshop.util.Constants;
+import com.adyen.adyenshop.util.CurrencyUtil;
 import com.adyen.adyenshop.util.WalletUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.BooleanResult;
@@ -59,12 +60,15 @@ public class OrderConfirmationActivity extends AppCompatActivity implements Goog
     private List<Product> productsList;
     private float cartTotal;
     private float orderTotal;
+    private String currency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirmation);
         Intent intent = getIntent();
+
+        currency = intent.getStringExtra("currency");
 
         totalPriceTextView = (TextView)findViewById(R.id.total_price);
         shippingTextView = (TextView)findViewById(R.id.shipping_price);
@@ -75,10 +79,10 @@ public class OrderConfirmationActivity extends AppCompatActivity implements Goog
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         productsList = fillProductListFromIntent(intent);
-        orderItemsAdapter = new OrderItemsAdapter(productsList);
+        orderItemsAdapter = new OrderItemsAdapter(productsList, currency);
         mRecyclerView.setAdapter(orderItemsAdapter);
 
-        cartTotal = getIntent().getFloatExtra("totalPrice", 0);
+        cartTotal = intent.getFloatExtra("totalPrice", 0);
 
         // [START basic_google_api_client]
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -92,11 +96,11 @@ public class OrderConfirmationActivity extends AppCompatActivity implements Goog
     }
 
     public void fillOrderAmounts() {
-        totalPriceTextView.setText("$ " + String.valueOf(String.format("%.02f", cartTotal)));
-        shippingTextView.setText("$ 0.12");
-        taxTextView.setText("$ 0.07");
+        totalPriceTextView.setText(CurrencyUtil.getCurrencySymbol(currency) + " " + String.valueOf(String.format("%.02f", cartTotal)));
+        shippingTextView.setText(CurrencyUtil.getCurrencySymbol(currency) + " 0.12");
+        taxTextView.setText(CurrencyUtil.getCurrencySymbol(currency) + " 0.07");
         orderTotal = (float)(cartTotal + 0.12 + 0.07);
-        orderTotalPriceTextView.setText("$ " + String.valueOf(String.format("%.02f", orderTotal)));
+        orderTotalPriceTextView.setText(CurrencyUtil.getCurrencySymbol(currency) + " " + String.valueOf(String.format("%.02f", orderTotal)));
     }
 
     public List<Product> fillProductListFromIntent(Intent intent) {
@@ -222,6 +226,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements Goog
         intent.putExtra(Constants.EXTRA_MASKED_WALLET, mMaskedWallet);
         intent.putExtra("orderTotal", orderTotal);
         intent.putExtra("itemsInCart", productsList.toArray(new Product[productsList.size()]));
+        intent.putExtra("currency", currency);
         startActivity(intent);
     }
 
@@ -255,6 +260,30 @@ public class OrderConfirmationActivity extends AppCompatActivity implements Goog
         }
 
         mProgressDialog.show();
+    }
+
+    @Override
+    protected void onStop() {
+        if(mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        if(mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+        super.onPause();
     }
 
     private void hideProgressDialog() {

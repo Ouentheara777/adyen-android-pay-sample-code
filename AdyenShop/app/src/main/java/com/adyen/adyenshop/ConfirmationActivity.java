@@ -41,6 +41,7 @@ public class ConfirmationActivity extends AdyenShopFragmentActivity {
     private RecyclerView mRecyclerView;
 
     private List<Product> productsList;
+    private String currency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +50,13 @@ public class ConfirmationActivity extends AdyenShopFragmentActivity {
         setContentView(R.layout.activity_confirmation);
         Intent intent = getIntent();
 
+        currency = intent.getStringExtra("currency");
+
         mRecyclerView = (RecyclerView)findViewById(R.id.order_confirmation_list);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         productsList = fillProductListFromIntent(intent);
-        orderItemsAdapter = new OrderItemsAdapter(productsList);
+        orderItemsAdapter = new OrderItemsAdapter(productsList, currency);
         mRecyclerView.setAdapter(orderItemsAdapter);
 
         createAndAddWalletFragment();

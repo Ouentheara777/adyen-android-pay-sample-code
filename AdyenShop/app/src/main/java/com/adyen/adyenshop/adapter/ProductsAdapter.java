@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.adyen.adyenshop.R;
 import com.adyen.adyenshop.model.Product;
-import com.adyen.adyenshop.util.CurrenciesEnum;
+import com.adyen.adyenshop.util.CurrencyUtil;
 import com.adyen.adyenshop.util.PreferencesUtil;
 
 import java.util.List;
@@ -58,7 +58,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
         productsViewHolder.mProductIcon.setImageResource(mDataset.get(position).getPhotoId());
         productsViewHolder.mProductIcon.setTag(mDataset.get(position).getPhotoId());
         productsViewHolder.mProductName.setText(mDataset.get(position).getName());
-        productsViewHolder.mProductPrice.setText(getCurrencySymbol() + String.valueOf(mDataset.get(position).getPrice()));
+        String currency = PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD");
+        productsViewHolder.mProductPrice.setText(CurrencyUtil.getCurrencySymbol(currency) + String.valueOf(mDataset.get(position).getPrice()));
     }
 
     @Override
@@ -71,20 +72,4 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public String getCurrencySymbol() {
-        String currency = PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD");
-        if(currency.equals(CurrenciesEnum.USD.toString())) {
-            return CurrenciesEnum.USD.getSymbol();
-        }
-        if(currency.equals(CurrenciesEnum.EUR.toString())) {
-            return CurrenciesEnum.EUR.getSymbol();
-        }
-        if(currency.equals(CurrenciesEnum.GBP.toString())) {
-            return CurrenciesEnum.GBP.getSymbol();
-        }
-        if(currency.equals(CurrenciesEnum.BRL.toString())) {
-            return CurrenciesEnum.BRL.getSymbol();
-        }
-        return CurrenciesEnum.USD.getSymbol();
-    }
 }

@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void initializeView() {
         context = this;
-        PreferencesUtil.getCurrencySharedPreferences(this).edit().clear();
+        PreferencesUtil.getCurrencySharedPreferences(this).edit().clear().commit();
 
         onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         itemsCount = (TextView) findViewById(R.id.items_count);
         itemsCount.setText(String.valueOf(itemsInCart));
 
-        activeCurrency =(TextView) findViewById(R.id.active_currency);
+        activeCurrency = (TextView) findViewById(R.id.active_currency);
 
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, OrderConfirmationActivity.class);
         intent.putExtra("itemsInCart", itemsInCartList.toArray(new Product[itemsInCartList.size()]));
         intent.putExtra("totalPrice", totalPrice);
+        intent.putExtra("currency", activeCurrency.getText());
         startActivity(intent);
     }
 
@@ -170,13 +171,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        PreferencesUtil.getCurrencySharedPreferences(this).edit().clear();
+        PreferencesUtil.getCurrencySharedPreferences(this).edit().clear().commit();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        PreferencesUtil.getCurrencySharedPreferences(this).edit().clear();
+        PreferencesUtil.getCurrencySharedPreferences(this).edit().clear().commit();
         super.onDestroy();
     }
 

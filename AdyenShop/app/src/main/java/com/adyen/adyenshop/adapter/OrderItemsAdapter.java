@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.adyen.adyenshop.R;
 import com.adyen.adyenshop.model.Product;
+import com.adyen.adyenshop.util.CurrencyUtil;
 
 import java.util.List;
 
@@ -19,9 +20,11 @@ import java.util.List;
 public class OrderItemsAdapter extends RecyclerView.Adapter<OrderItemsAdapter.OrderItemsViewHolder> {
 
     private List<Product> mDataset;
+    private String currency;
 
-    public OrderItemsAdapter(List<Product> myDataset) {
-        mDataset = myDataset;
+    public OrderItemsAdapter(List<Product> myDataset, String currency) {
+        this.mDataset = myDataset;
+        this.currency = currency;
     }
 
     public static class OrderItemsViewHolder extends RecyclerView.ViewHolder {
@@ -52,7 +55,7 @@ public class OrderItemsAdapter extends RecyclerView.Adapter<OrderItemsAdapter.Or
         orderItemsViewHolder.mOrderItemIcon.setImageResource(mDataset.get(position).getPhotoId());
         orderItemsViewHolder.mOrderItemIcon.setTag(mDataset.get(position).getPhotoId());
         orderItemsViewHolder.mOrderItemName.setText(mDataset.get(position).getName());
-        orderItemsViewHolder.mOrderItemPrice.setText("$ " + String.valueOf(mDataset.get(position).getPrice()));
+        orderItemsViewHolder.mOrderItemPrice.setText(CurrencyUtil.getCurrencySymbol(currency) + String.valueOf(mDataset.get(position).getPrice()));
     }
 
     @Override
