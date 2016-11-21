@@ -16,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.adyen.adyenshop.adapter.ProductsAdapter;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Context context;
 
-    private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
+    private SharedPreferences.OnSharedPreferenceChangeListener onCurrencySharedPreferenceChangeListener;
 
     private List<Product> itemsInCartList = new ArrayList<Product>();
     private int itemsInCart;
@@ -84,8 +86,9 @@ public class MainActivity extends AppCompatActivity {
     public void initializeView() {
         context = this;
         PreferencesUtil.getCurrencySharedPreferences(this).edit().clear().commit();
+        PreferencesUtil.getInstallmentsSharedPreferences(this).edit().clear().commit();
 
-        onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        onCurrencySharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
                 activeCurrency.setText(PreferencesUtil.getCurrencySharedPreferences(context).getString(getString(R.string.active_currency), "USD"));
@@ -93,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 productsAdapter.notifyDataSetChanged();
             }
         };
-        PreferencesUtil.registerSharedPreferenceListener(this, onSharedPreferenceChangeListener);
+        PreferencesUtil.registerSharedPreferenceListener(this, getString(R.string.currency_preferences_file_name), onCurrencySharedPreferenceChangeListener);
 
         itemsCount = (TextView) findViewById(R.id.items_count);
         itemsCount.setText(String.valueOf(itemsInCart));
@@ -163,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
                 Dialog currencyDialog = createCurrenciesDialog();
                 currencyDialog.show();
                 break;
+            case R.id.action_installments:
+                Dialog installmentsDialog = createInstallmentsPickerDialog();
+                installmentsDialog.show();
+                break;
             default:
                 break;
         }
@@ -172,12 +179,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         PreferencesUtil.getCurrencySharedPreferences(this).edit().clear().commit();
+        PreferencesUtil.getInstallmentsSharedPreferences(this).edit().clear().commit();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
         PreferencesUtil.getCurrencySharedPreferences(this).edit().clear().commit();
+        PreferencesUtil.getInstallmentsSharedPreferences(this).edit().clear().commit();
         super.onDestroy();
     }
 
@@ -187,9 +196,46 @@ public class MainActivity extends AppCompatActivity {
                 .setItems(R.array.currency_array, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String[] currencies = getResources().getStringArray(R.array.currency_array);
-                        PreferencesUtil.addStringToSharedPreferences(context, getString(R.string.active_currency), currencies[which]);
+                        PreferencesUtil.addStringToSharedPreferences(context, getString(R.string.currency_preferences_file_name), getString(R.string.active_currency), currencies[which]);
                     }
                 });
         return builder.create();
+    }
+
+    private Dialog createInstallmentsPickerDialog() {
+        final Dialog installmentsPickerDialog = new Dialog(this);
+
+        installmentsPickerDialog.setTitle(R.string.set_installments_title);
+        installmentsPickerDialog.setContentView(R.layout.dialog_installments);
+
+        final NumberPicker numberOfInstallmentsPicker = (NumberPicker) installmentsPickerDialog.findViewById(R.id.installments_number);
+        numberOfInstallmentsPicker.setMinValue(0);
+        numberOfInstallmentsPicker.setMaxValue(12);
+        numberOfInstallmentsPicker.setWrapSelectorWheel(false);
+        numberOfInstallmentsPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int oldValue, int newValue) {
+                PreferencesUtil.addStringToSharedPreferences(context, getString(R.string.installments_preferences_file_name), getString(R.string.number_of_installments), String.valueOf(newValue));
+            }
+        });
+
+        Button setNumberOfInstallments = (Button) installmentsPickerDialog.findViewById(R.id.set_installments);
+        setNumberOfInstallments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PreferencesUtil.addStringToSharedPreferences(context, getString(R.string.installments_preferences_file_name), getString(R.string.number_of_installments), String.valueOf(numberOfInstallmentsPicker.getValue()));
+                installmentsPickerDialog.dismiss();
+            }
+        });
+
+        Button cancelNumberOfInstallments = (Button) installmentsPickerDialog.findViewById(R.id.cancel_installments);
+        cancelNumberOfInstallments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                installmentsPickerDialog.dismiss();
+            }
+        });
+
+        return installmentsPickerDialog;
     }
 }

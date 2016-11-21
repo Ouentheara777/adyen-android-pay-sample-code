@@ -15,6 +15,7 @@ import android.widget.Button;
 
 import com.adyen.adyenshop.model.Product;
 import com.adyen.adyenshop.util.Constants;
+import com.adyen.adyenshop.util.PreferencesUtil;
 import com.adyen.adyenshop.util.WalletUtil;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -147,14 +148,26 @@ public class FullWalletConfirmationFragment extends Fragment implements
                                 amount.put("currency", "USD");
                                 amount.put("value", String.valueOf((int) (orderTotal * 100)));
                                 paymentData.put("amount", amount);
+
+                                //installments
+                                String noOfInstallments = PreferencesUtil.getInstallmentsSharedPreferences(getActivity().getApplicationContext()).getString(getString(R.string.number_of_installments), "0");
+                                Log.i(tag, "No. of installments: " + noOfInstallments);
+                                if(Integer.valueOf(noOfInstallments) > 0) {
+                                    JSONObject installments = new JSONObject();
+                                    installments.put("value", Integer.valueOf(noOfInstallments));
+                                    paymentData.put("installments", installments);
+                                }
+
                                 if(isAuthAndCapture) {
-                                    paymentData.put("merchantAccount", "GooglePOSUK");
+                                    //paymentData.put("merchantAccount", "GooglePOSUK");
+                                    paymentData.put("merchantAccount", "TestMerchantAP");
                                     paymentData.put("reference", "AdyenShop_Auth_Capture");
                                     paymentData.put("shopperEmail", fullWallet.getEmail());
                                     Log.i(tag, "Adding parameter captureDelayHours");
                                     paymentData.put("captureDelayHours", 0);
                                 } else {
-                                    paymentData.put("merchantAccount", "GooglePOSUK");
+                                    //paymentData.put("merchantAccount", "GooglePOSUK");
+                                    paymentData.put("merchantAccount", "TestMerchantAP");
                                     paymentData.put("reference", "AdyenShop_Auth");
                                     paymentData.put("shopperEmail", fullWallet.getEmail());
                                 }

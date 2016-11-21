@@ -7,4 +7,10 @@
         android:orderInCategory="100"
         android:title="@string/action_currency"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_installments"
+        android:orderInCategory="100"
+        android:title="@string/action_installments"
+        app:showAsAction="never" />
 </menu>

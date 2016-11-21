@@ -17,15 +17,19 @@ public class PreferencesUtil {
         return context.getSharedPreferences(context.getString(R.string.currency_preferences_file_name), MODE_PRIVATE);
     }
 
-    public static void addStringToSharedPreferences(Context context, String key, String value) {
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.currency_preferences_file_name), MODE_PRIVATE);
+    public static SharedPreferences getInstallmentsSharedPreferences(Context context) {
+        return context.getSharedPreferences(context.getString(R.string.installments_preferences_file_name), MODE_PRIVATE);
+    }
+
+    public static void addStringToSharedPreferences(Context context, String sharedPreferencesName, String key, String value) {
+        SharedPreferences sharedPref = context.getSharedPreferences(sharedPreferencesName, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(key, value);
         editor.commit();
     }
 
-    public static void registerSharedPreferenceListener(Context context, SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.currency_preferences_file_name), MODE_PRIVATE);
+    public static void registerSharedPreferenceListener(Context context, String sharedPrefencesName, SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        SharedPreferences sharedPref = context.getSharedPreferences(sharedPrefencesName, MODE_PRIVATE);
         sharedPref.registerOnSharedPreferenceChangeListener(listener);
     }
 

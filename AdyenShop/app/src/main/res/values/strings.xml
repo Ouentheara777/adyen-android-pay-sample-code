@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Adyen Shop</string>
     <string name="action_currency">Currency</string>
+    <string name="action_installments">Installments</string>
+
+    <string name="set_installments">Set</string>
+    <string name="cancel_installments">Cancel</string>
+
+    <string name="set_installments_title">Set the number of installments</string>
 
     <!-- LIVE -->
     <!--string name="public_key">BE+Dr5JbSO6M3LRJt4Xvv0h3NIlbeePpLEK0LZ39WhjJedJAcnI8dnTpJAcicR33R0LnRmQgV+04akGy/j7zWV0=</string-->
@@ -27,5 +33,7 @@
     
     <string name="select_currency">Select currency</string>
     <string name="currency_preferences_file_name">currency_preferences</string>
+    <string name="installments_preferences_file_name">installments_preferences</string>
     <string name="active_currency">activeCurrency</string>
+    <string name="number_of_installments">numberOfInstallments</string>
 </resources>
