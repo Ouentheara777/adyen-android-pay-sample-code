@@ -167,7 +167,8 @@ public class OrderConfirmationActivity extends AppCompatActivity implements Goog
         maskedWalletRequest = WalletUtil.createMaskedWalletRequest(
                 productsList,
                 String.valueOf(orderTotal),
-                getString(R.string.public_key));
+                getString(R.string.public_key),
+                getApplicationContext());
 
         // [START params_builder]
         WalletFragmentInitParams.Builder startParamsBuilder = WalletFragmentInitParams.newBuilder()

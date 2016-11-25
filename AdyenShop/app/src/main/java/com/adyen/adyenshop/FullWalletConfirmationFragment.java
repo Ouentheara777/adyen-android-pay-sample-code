@@ -131,7 +131,6 @@ public class FullWalletConfirmationFragment extends Fragment implements
                     case Activity.RESULT_OK:
                         if (data != null && data.hasExtra(WalletConstants.EXTRA_FULL_WALLET)) {
                             FullWallet fullWallet = data.getParcelableExtra(WalletConstants.EXTRA_FULL_WALLET);
-                            fullWallet.getProxyCard().getPan();
                             // the full wallet can now be used to process the customer's payment
                             // send the wallet info up to server to process, and to get the result
                             // for sending a transaction status
@@ -145,18 +144,18 @@ public class FullWalletConfirmationFragment extends Fragment implements
                                 paymentData.put("additionalData", additionalData);
 
                                 JSONObject amount = new JSONObject();
-                                amount.put("currency", "USD");
+                                amount.put("currency", "BRL");// PreferencesUtil.getCurrencySharedPreferences(getActivity().getApplicationContext()).getString(getActivity().getApplicationContext().getString(R.string.active_currency), "USD"));
                                 amount.put("value", String.valueOf((int) (orderTotal * 100)));
                                 paymentData.put("amount", amount);
 
                                 //installments
                                 String noOfInstallments = PreferencesUtil.getInstallmentsSharedPreferences(getActivity().getApplicationContext()).getString(getString(R.string.number_of_installments), "0");
-                                Log.i(tag, "No. of installments: " + noOfInstallments);
-                                if(Integer.valueOf(noOfInstallments) > 0) {
+                                //if(Integer.valueOf(noOfInstallments) > 0) {
+                                    Log.i(tag, "No. of installments: " + noOfInstallments);
                                     JSONObject installments = new JSONObject();
-                                    installments.put("value", Integer.valueOf(noOfInstallments));
+                                    installments.put("value", 4);//Integer.valueOf(noOfInstallments));
                                     paymentData.put("installments", installments);
-                                }
+                                //}
 
                                 if(isAuthAndCapture) {
                                     //paymentData.put("merchantAccount", "GooglePOSUK");
@@ -267,7 +266,8 @@ public class FullWalletConfirmationFragment extends Fragment implements
     private void getFullWallet() {
         FullWalletRequest fullWalletRequest = WalletUtil.createFullWalletRequest(productsList,
                 String.valueOf(orderTotal),
-                mMaskedWallet.getGoogleTransactionId());
+                mMaskedWallet.getGoogleTransactionId(),
+                getActivity().getApplicationContext());
 
         // [START load_full_wallet]
         Wallet.Payments.loadFullWallet(mGoogleApiClient, fullWalletRequest,

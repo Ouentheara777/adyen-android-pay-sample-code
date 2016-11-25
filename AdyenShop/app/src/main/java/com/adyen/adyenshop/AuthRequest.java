@@ -28,7 +28,7 @@ public class AuthRequest extends JsonObjectRequest {
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
             //return createBasicAuthHeader("ws_891138@Company.GoogleCommerce", "}9w8]]!3h[(SgB==%B@#7!(2D");
-        return createBasicAuthHeader("ws_578310@Company.TestCompany", "abKekskbj5un");
+        return createBasicAuthHeader("ws_578310@Company.TestCompany", "fuKbmquward9");
     }
 
     Map<String, String> createBasicAuthHeader(String username, String password) {

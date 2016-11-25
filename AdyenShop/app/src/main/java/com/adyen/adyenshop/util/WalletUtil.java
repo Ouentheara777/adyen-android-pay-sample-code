@@ -1,5 +1,8 @@
 package com.adyen.adyenshop.util;
 
+import android.content.Context;
+
+import com.adyen.adyenshop.R;
 import com.adyen.adyenshop.model.Product;
 import com.google.android.gms.wallet.Cart;
 import com.google.android.gms.wallet.FullWalletRequest;
@@ -28,7 +31,8 @@ public class WalletUtil {
      */
     public static MaskedWalletRequest createMaskedWalletRequest(List<Product> product,
                                                                 String orderTotal,
-                                                                String publicKey) {
+                                                                String publicKey,
+                                                                Context context) {
         // Validate the public key
         if (publicKey == null || publicKey.contains("REPLACE_ME")) {
             throw new IllegalArgumentException("Invalid public key, see README for instructions.");
@@ -43,26 +47,27 @@ public class WalletUtil {
                         .build();
         // [END direct_integration_parameters]
 
-        return createMaskedWalletRequest(product, orderTotal, parameters);
+        return createMaskedWalletRequest(product, orderTotal, parameters, context);
     }
 
     private static MaskedWalletRequest createMaskedWalletRequest(List<Product> product,
                                                                  String orderTotal,
-                                                                 PaymentMethodTokenizationParameters parameters) {
+                                                                 PaymentMethodTokenizationParameters parameters,
+                                                                 Context context) {
         // Build a List of all line items
-        List<LineItem> lineItems = buildLineItems(product, true);
+        List<LineItem> lineItems = buildLineItems(product, true, context);
 
         // [START masked_wallet_request]
         MaskedWalletRequest request = MaskedWalletRequest.newBuilder()
                 .setMerchantName(Constants.MERCHANT_NAME)
                 .setPhoneNumberRequired(true)
                 .setShippingAddressRequired(true)
-                .setCurrencyCode(Constants.CURRENCY_CODE_USD)
+                .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                 .setEstimatedTotalPrice(orderTotal)
                 // Create a Cart with the current line items. Provide all the information
                 // available up to this point with estimates for shipping and tax included.
                 .setCart(Cart.newBuilder()
-                        .setCurrencyCode(Constants.CURRENCY_CODE_USD)
+                        .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                         .setTotalPrice(orderTotal)
                         .setLineItems(lineItems)
                         .build())
@@ -82,15 +87,16 @@ public class WalletUtil {
      */
     public static FullWalletRequest createFullWalletRequest(List<Product> products,
                                                             String orderTotal,
-                                                            String googleTransactionId) {
+                                                            String googleTransactionId,
+                                                            Context context) {
 
-        List<LineItem> lineItems = buildLineItems(products, false);
+        List<LineItem> lineItems = buildLineItems(products, false, context);
 
         // [START full_wallet_request]
         FullWalletRequest request = FullWalletRequest.newBuilder()
                 .setGoogleTransactionId(googleTransactionId)
                 .setCart(Cart.newBuilder()
-                        .setCurrencyCode(Constants.CURRENCY_CODE_USD)
+                        .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                         .setTotalPrice(orderTotal)
                         .setLineItems(lineItems)
                         .build())
@@ -111,14 +117,14 @@ public class WalletUtil {
      *                   shipping and tax values.
      * @return list of line items
      */
-    private static List<LineItem> buildLineItems(List<Product> products, boolean isEstimate) {
+    private static List<LineItem> buildLineItems(List<Product> products, boolean isEstimate, Context context) {
         List<LineItem> list = new ArrayList<LineItem>();
 
         for (Product product : products) {
             String itemPrice = toDollars((long) product.getPrice());
 
             list.add(LineItem.newBuilder()
-                    .setCurrencyCode(Constants.CURRENCY_CODE_USD)
+                    .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                     .setDescription(product.getName())
                     .setQuantity("1")
                     .setUnitPrice(itemPrice)
@@ -129,7 +135,7 @@ public class WalletUtil {
         String shippingPrice = toDollars((long) 0.11);
 
         list.add(LineItem.newBuilder()
-                .setCurrencyCode(Constants.CURRENCY_CODE_USD)
+                .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                 .setDescription(Constants.DESCRIPTION_LINE_ITEM_SHIPPING)
                 .setRole(LineItem.Role.SHIPPING)
                 .setTotalPrice(shippingPrice)
@@ -138,7 +144,7 @@ public class WalletUtil {
         String tax = toDollars((long) 0.11);
 
         list.add(LineItem.newBuilder()
-                .setCurrencyCode(Constants.CURRENCY_CODE_USD)
+                .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                 .setDescription(Constants.DESCRIPTION_LINE_ITEM_TAX)
                 .setRole(LineItem.Role.TAX)
                 .setTotalPrice(tax)
