@@ -62,12 +62,12 @@ public class WalletUtil {
                 .setMerchantName(Constants.MERCHANT_NAME)
                 .setPhoneNumberRequired(true)
                 .setShippingAddressRequired(true)
-                .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
+                .setCurrencyCode(PreferencesUtil.getDefaultSharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                 .setEstimatedTotalPrice(orderTotal)
                 // Create a Cart with the current line items. Provide all the information
                 // available up to this point with estimates for shipping and tax included.
                 .setCart(Cart.newBuilder()
-                        .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
+                        .setCurrencyCode(PreferencesUtil.getDefaultSharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                         .setTotalPrice(orderTotal)
                         .setLineItems(lineItems)
                         .build())
@@ -96,7 +96,7 @@ public class WalletUtil {
         FullWalletRequest request = FullWalletRequest.newBuilder()
                 .setGoogleTransactionId(googleTransactionId)
                 .setCart(Cart.newBuilder()
-                        .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
+                        .setCurrencyCode(PreferencesUtil.getDefaultSharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                         .setTotalPrice(orderTotal)
                         .setLineItems(lineItems)
                         .build())
@@ -124,7 +124,7 @@ public class WalletUtil {
             String itemPrice = toDollars((long) product.getPrice());
 
             list.add(LineItem.newBuilder()
-                    .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
+                    .setCurrencyCode(PreferencesUtil.getDefaultSharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                     .setDescription(product.getName())
                     .setQuantity("1")
                     .setUnitPrice(itemPrice)
@@ -135,7 +135,7 @@ public class WalletUtil {
         String shippingPrice = toDollars((long) 0.11);
 
         list.add(LineItem.newBuilder()
-                .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
+                .setCurrencyCode(PreferencesUtil.getDefaultSharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                 .setDescription(Constants.DESCRIPTION_LINE_ITEM_SHIPPING)
                 .setRole(LineItem.Role.SHIPPING)
                 .setTotalPrice(shippingPrice)
@@ -144,7 +144,7 @@ public class WalletUtil {
         String tax = toDollars((long) 0.11);
 
         list.add(LineItem.newBuilder()
-                .setCurrencyCode(PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
+                .setCurrencyCode(PreferencesUtil.getDefaultSharedPreferences(context).getString(context.getString(R.string.active_currency), "USD"))
                 .setDescription(Constants.DESCRIPTION_LINE_ITEM_TAX)
                 .setRole(LineItem.Role.TAX)
                 .setTotalPrice(tax)

@@ -85,18 +85,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void initializeView() {
         context = this;
-        PreferencesUtil.getCurrencySharedPreferences(this).edit().clear().commit();
-        PreferencesUtil.getInstallmentsSharedPreferences(this).edit().clear().commit();
+        PreferencesUtil.getDefaultSharedPreferences(this).edit().clear().commit();
 
         onCurrencySharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-                activeCurrency.setText(PreferencesUtil.getCurrencySharedPreferences(context).getString(getString(R.string.active_currency), "USD"));
+                activeCurrency.setText(PreferencesUtil.getDefaultSharedPreferences(context).getString(getString(R.string.active_currency), "USD"));
                 mRecyclerView.invalidate();
                 productsAdapter.notifyDataSetChanged();
             }
         };
-        PreferencesUtil.registerSharedPreferenceListener(this, getString(R.string.currency_preferences_file_name), onCurrencySharedPreferenceChangeListener);
+        PreferencesUtil.registerSharedPreferenceListener(this, onCurrencySharedPreferenceChangeListener);
 
         itemsCount = (TextView) findViewById(R.id.items_count);
         itemsCount.setText(String.valueOf(itemsInCart));
@@ -176,27 +175,13 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onStop() {
-        PreferencesUtil.getCurrencySharedPreferences(this).edit().clear().commit();
-        PreferencesUtil.getInstallmentsSharedPreferences(this).edit().clear().commit();
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        PreferencesUtil.getCurrencySharedPreferences(this).edit().clear().commit();
-        PreferencesUtil.getInstallmentsSharedPreferences(this).edit().clear().commit();
-        super.onDestroy();
-    }
-
     private Dialog createCurrenciesDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.select_currency)
                 .setItems(R.array.currency_array, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String[] currencies = getResources().getStringArray(R.array.currency_array);
-                        PreferencesUtil.addStringToSharedPreferences(context, getString(R.string.currency_preferences_file_name), getString(R.string.active_currency), currencies[which]);
+                        PreferencesUtil.addStringToSharedPreferences(context, getString(R.string.active_currency), currencies[which]);
                     }
                 });
         return builder.create();
@@ -215,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         numberOfInstallmentsPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int oldValue, int newValue) {
-                PreferencesUtil.addStringToSharedPreferences(context, getString(R.string.installments_preferences_file_name), getString(R.string.number_of_installments), String.valueOf(newValue));
+                PreferencesUtil.addStringToSharedPreferences(context, getString(R.string.number_of_installments), String.valueOf(newValue));
             }
         });
 
@@ -223,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
         setNumberOfInstallments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PreferencesUtil.addStringToSharedPreferences(context, getString(R.string.installments_preferences_file_name), getString(R.string.number_of_installments), String.valueOf(numberOfInstallmentsPicker.getValue()));
+                PreferencesUtil.addStringToSharedPreferences(context, getString(R.string.number_of_installments), String.valueOf(numberOfInstallmentsPicker.getValue()));
                 installmentsPickerDialog.dismiss();
             }
         });

@@ -58,7 +58,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
         productsViewHolder.mProductIcon.setImageResource(mDataset.get(position).getPhotoId());
         productsViewHolder.mProductIcon.setTag(mDataset.get(position).getPhotoId());
         productsViewHolder.mProductName.setText(mDataset.get(position).getName());
-        String currency = PreferencesUtil.getCurrencySharedPreferences(context).getString(context.getString(R.string.active_currency), "USD");
+        String currency = PreferencesUtil.getDefaultSharedPreferences(context).getString(context.getString(R.string.active_currency), "USD");
         productsViewHolder.mProductPrice.setText(CurrencyUtil.getCurrencySymbol(currency) + String.valueOf(mDataset.get(position).getPrice()));
     }
 

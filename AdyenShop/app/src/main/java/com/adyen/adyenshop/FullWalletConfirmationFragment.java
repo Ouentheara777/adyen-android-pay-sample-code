@@ -144,18 +144,18 @@ public class FullWalletConfirmationFragment extends Fragment implements
                                 paymentData.put("additionalData", additionalData);
 
                                 JSONObject amount = new JSONObject();
-                                amount.put("currency", "BRL");// PreferencesUtil.getCurrencySharedPreferences(getActivity().getApplicationContext()).getString(getActivity().getApplicationContext().getString(R.string.active_currency), "USD"));
+                                amount.put("currency", PreferencesUtil.getDefaultSharedPreferences(getActivity().getApplicationContext()).getString(getActivity().getApplicationContext().getString(R.string.active_currency), "USD"));
                                 amount.put("value", String.valueOf((int) (orderTotal * 100)));
                                 paymentData.put("amount", amount);
 
                                 //installments
-                                String noOfInstallments = PreferencesUtil.getInstallmentsSharedPreferences(getActivity().getApplicationContext()).getString(getString(R.string.number_of_installments), "0");
-                                //if(Integer.valueOf(noOfInstallments) > 0) {
+                                String noOfInstallments = PreferencesUtil.getDefaultSharedPreferences(getActivity().getApplicationContext()).getString(getString(R.string.number_of_installments), "0");
+                                if(Integer.valueOf(noOfInstallments) > 0) {
                                     Log.i(tag, "No. of installments: " + noOfInstallments);
                                     JSONObject installments = new JSONObject();
-                                    installments.put("value", 4);//Integer.valueOf(noOfInstallments));
+                                    installments.put("value", Integer.valueOf(noOfInstallments));
                                     paymentData.put("installments", installments);
-                                //}
+                                }
 
                                 if(isAuthAndCapture) {
                                     //paymentData.put("merchantAccount", "GooglePOSUK");
