@@ -13,11 +13,11 @@
 	- [Step 8 - Send the payment token to Adyen for processing](#step-8-send-the-payment-token-to-adyen-for-processing)
 	- [Step 9 - Switch to live](#step-9-testing)
 
-##Introduction
+## Introduction
 
 The documentation below will describe the Android Pay implementation as per the [Android Pay specifications](https://developers.google.com/android-pay/android/tutorial) of Google. The Adyen specific steps are included in the flow to describe the complete end-to-end integration process.
 
-##Step 1 - Set up the sample and Google Play Services
+## Step 1 - Set up the sample and Google Play Services
 
 Add the following dependency to your Gradle build file:
 
@@ -35,7 +35,7 @@ Before you can use Android Pay in your app, you need to add the following tag to
         <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
     </application>
 
-##Step 2 - Check whether the user is enabled for Android Pay
+## Step 2 - Check whether the user is enabled for Android Pay
 
 Before starting the Android Pay flow, use the `isReadyToPay` method to check whether the user has the Android Pay app installed and is ready to pay. When this method returns `true`, show the Android Pay button. When it returns `false`, display other checkout options along with text notifying the user to set up the Android Pay app.
 
@@ -62,7 +62,7 @@ Before starting the Android Pay flow, use the `isReadyToPay` method to check whe
                 }
             });
 
-##Step 3 - Create a Masked Wallet request
+## Step 3 - Create a Masked Wallet request
 
 You'll need to create an instance of `MaskedWalletRequest` to invoke the Android Pay API to retrieve the Masked Wallet information (such as shipping address, masked backing instrument number, and cart items). The `MaskedWalletRequest` object must be passed in when you initialize the purchase wallet fragment in the next section.
 
@@ -167,7 +167,7 @@ When the user clicks the buy button, the Masked Wallet is retrieved and returned
         }
     }
 
-##Step 5 - Confirm the purchase and set the Masked Wallet
+## Step 5 - Confirm the purchase and set the Masked Wallet
 
 After the app obtains the Masked Wallet, it should present a confirmation page showing the total cost of the items purchased in the transaction.
 
@@ -181,7 +181,7 @@ After the app obtains the Masked Wallet, it should present a confirmation page s
 
 At this point the app has the shipping address and billing address, so you can calculate the exact total purchase price and display it. This activity also allows the user to change the Android Pay payment instrument and change the shipping address for the purchase.
 
-##Step 6 - Request the Full Wallet
+## Step 6 - Request the Full Wallet
 When the user confirms the order, you are ready to request the Full Wallet. The Full Wallet Request should have the total charge that you are requesting including exact shipping, handling and tax. You must include the `GoogleTransactionId` that you received in the Masked Wallet response.
 
 Create a `FullWalletRequest` object that contains the various line items (including tax and shipping if necessary) and a Cart object.
@@ -285,6 +285,6 @@ Please contact Adyen Support for more background or information.
 
 Once successfully completed the testing with the servers of Google and Adyen, you are ready for the switch to live.
 
-Contact Adyen Support to request the 'publicKey' for live payment processing. Also review the [Android Pay setup guidelines] (https://developers.google.com/android-pay/android/tutorial) for obtaining live credentials of your application.
+Contact Adyen Support to request the 'publicKey' for live payment processing. Configure this public key in the application and request Google to activate Android Pay acceptance in the app according to [Android Pay setup guidelines] (https://developers.google.com/android-pay/android/tutorial). Please note that Google needs to approve access to the production environment to obtain real cardholder data, and that this environment needs to be configured in the application code. See [Android Pay deployment guidelines] (https://developers.google.com/android-pay/deployment#deploy) for more information.
 
-We will support your live testing activities from March 9 onwards. Please contact Adyen Support for more information.
+Please contact Adyen Support (support@adyen.com) for more information.
